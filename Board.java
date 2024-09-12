@@ -16,9 +16,6 @@ public class Board {
 	private int numRows;
 	private int numCols;
 
-	// TODO Add the other methods that are in the handout, and fill out the rest of
-	// this file
-
 	/**
 	 * Constructor for the board which sets up an empty grid of size rows by columns
 	 * Use the first array index as the rows and the second index as the columns
@@ -27,7 +24,6 @@ public class Board {
 	 * @param cols number of columns on the board
 	 */
 	public Board(int rows, int cols) {
-		// TODO finish implementing this constructor
 		this.grid = new Vehicle[rows][cols];
 		this.numRows = rows;
 		this.numCols = cols;
@@ -77,35 +73,15 @@ public class Board {
 	 */
 	public void addVehicle(VehicleType type, int startRow, int startCol, boolean vert, int length) {
 		Vehicle vehicle = new Vehicle(type, startRow, startCol, vert, length);
-		Location[] locationsOn = vehicle.locationsOn();
-		// boolean locationsAvailible = true;
 
-		if (Arrays.stream(locationsOn).allMatch(this::isValidPlacement)) {
-			for (Location currCell : locationsOn) {
+		if (Arrays.stream(vehicle.locationsOn()).allMatch(this::isValidPlacement)) {
+			for (Location currCell : vehicle.locationsOn())
 				this.grid[currCell.getRow()][currCell.getCol()] = vehicle;
-			}
 		} else {
 			new Warning(
 					"One or more of the vehicle's expected cells to be placed on were occupied or are out of bonds for the current board, so the vehicle wasn't added.")
 					.print();
 		}
-
-
-		// for (Location currCell : locationsOn) {
-		// 	if (this.getVehicleAt(currCell) != null || !isInBounds(currCell)) {
-		// 		locationsAvailible = false;
-		// 		new Warning("The location " + currCell + " is already occupied! Can't place a vehicle here.").print();
-		// 	}
-		// }
-
-		// if (locationsAvailible) {
-			
-		// } else {
-		// 	new Warning(
-		// 			"One or more of the vehicle's expected cells to be placed on were occupied or are out of bonds for the current board, so the vehicle wasn't added.")
-		// 			.print();
-		// }
-
 	}
 
 	private boolean isValidPlacement(Location location) {
@@ -126,11 +102,13 @@ public class Board {
 
 		if (canMoveAVehicleAt(start, numSpaces)) {
 
+			// Clear the vehicle's current locations
 			for (Location locationOn : vehicle.locationsOn())
 				this.grid[locationOn.getRow()][locationOn.getCol()] = null;
 
 			vehicle.move(numSpaces);
 
+			// Place the vehicle on the new locations
 			for (Location locationOn : vehicle.locationsOn())
 				this.grid[locationOn.getRow()][locationOn.getCol()] = vehicle;
 
@@ -159,10 +137,9 @@ public class Board {
 			return false;
 		}
 		Location[] locationsTravelled = vehicle.locationsPath(numSpaces);
-		// Return false if there are other cars on our way or the planned way is out of
-		// bounds.
+
 		for (Location locationTravelled : locationsTravelled) {
-			if (getVehicleAt(locationTravelled) != null) {
+			if (/* checking if the location is occupied */ getVehicleAt(locationTravelled) != null) {
 				new Warning("There is a vehicle on the way (r-" + locationTravelled.getRow() + "-c-"
 						+ locationTravelled.getCol() + "), can't move your " + vehicle.getVehicleType()
 						+ " to the final location.").print();
