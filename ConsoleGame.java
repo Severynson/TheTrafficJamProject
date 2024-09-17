@@ -41,11 +41,8 @@ public class ConsoleGame {
 			Location inputLocation = getLocationFromUser(level.getRows(), level.getColumns());
 			if (isValidLocation(inputLocation, level.getRows(), level.getColumns())) {
 				int numSpaces = getInteger("How many spaces would you like this vehicle to move?");
-				Vehicle vehicle = level.getBoard().getVehicleAt(inputLocation);
 				level.getBoard().moveVehicleAt(inputLocation, numSpaces);
-				boolean isWin = Arrays.stream(vehicle.locationsOn())
-						.anyMatch(loc -> loc.equals(level.getWinLocation()));
-				if (isWin) {
+				if (isWin()) {
 					System.out.print("Congrats! You won this level!");
 					break;
 				} else {
@@ -54,6 +51,10 @@ public class ConsoleGame {
 			}
 
 		} while (true);
+	}
+
+	public boolean isWin() {
+		return level.getBoard().getVehicleAt(level.getWinLocation()) != null;
 	}
 
 	/**
