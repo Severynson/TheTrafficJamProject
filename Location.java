@@ -10,6 +10,15 @@ public class Location {
 	private int row;
 	private int col;
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Location) {
+			Location loc = (Location) obj;
+			return this.row == loc.row && this.col == loc.col;
+		}
+		return false;
+	}
+
 	/**
 	 * The constructor that will set up the object to store a row and column
 	 * 
