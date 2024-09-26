@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This represents the board. Really what it is going to do is just have a 2d
@@ -12,7 +14,7 @@ import java.util.*;
  */
 
 public class Board {
-	Vehicle[][] grid;
+	private Vehicle[][] grid;
 	private int numRows;
 	private int numCols;
 
@@ -163,6 +165,20 @@ public class Board {
 					+ " is out of bounds for a current game map.").print();
 		}
 		return inBounds;
+	}
+	
+	public Set<Vehicle> getVehiclesOnBoard() {
+		Set<Vehicle> vehicles = new HashSet<>();
+
+		for (int row = 0; row < grid.length; row++) {
+			for (int col = 0; col < grid[row].length; col++) {
+				Vehicle vehicle = grid[row][col];
+				if (vehicle != null)
+					vehicles.add(vehicle);
+			}
+		}
+
+		return vehicles;
 	}
 
 	// This method helps create a string version of the board
